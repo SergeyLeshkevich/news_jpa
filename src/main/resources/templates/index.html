@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{menu::menu}"></div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 m_corr" >
+            <div class="main_news">
+                <center><img th:src="@{/images/{idImage}(idImage=${newsList[0].images[0].id})}" class="img-fluid"></center>
+
+                 <h2 th:text="${newsList[0].title}"/><br>
+                 <p th:text="${newsList[0].getTextForIndex(300)}"/><br>
+                 <a th:href="@{/news/detail/{id}(id=${newsList[0].id})}">читать далее...</a>
+                 <hr>
+                 <span class="date" th:text="${newsList[0].date}"/>
+            </div>
+        </div>
+
+        <div class="col-lg-4 m_corr">
+            <iframe frameborder="0" height="131" marginheight="0" marginwidth="0" scrolling="no"
+                src="https://admin.myfin.by/outer/informer/brest/full" width="100%"></iframe><hr>
+
+        <h3>Топ новости за неделю:</h3>
+        <!-- сделать вывод 3 лучших новостей за последнюю неделю - JAVA -->
+
+            <div class="top_news" th:each="news:${topList}" >
+                <span th:text="${news.ratingPos}"/>
+                <button class="like_button" th:onclick="|updateRating(${news.id}, 'pos')|" >&#128077;</button>
+                <h4 th:text="${news.title}" style="display: inline"/>
+                <button class="like_button" th:onclick="|updateRating(${news.id}, 'neg')|">&#128078;</button>
+                <span th:text="${news.ratingNeg}"/>
+                <p th:text="${news.getTextForIndex(150)}"/>
+                <a th:href="@{/news/detail/{id}(id=${news.id})}">читать далее...</a>
+                <!-- В этой новости в превью выводится до 150 символов - JAVA -->
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row" th:each="news,index:${newsList}" >
+        <div class="col-md-12 m_corr"  th:if="${index.index}>0">
+            <div class="regular_news">
+                <div class="row">
+                    <div class="col-4">
+
+                        <img th:src="@{/images/{idImage} (idImage=${news.images[0].id})}" class="img-fluid">
+
+                    </div>
+                    <div class="col-8">
+
+                        <h4 th:text="${news.title}"/>
+                        <div th:text="${news.getTextForIndex(250)}"/>
+                            <a th:href="@{/news/{id}(id=${news.id})}">читать далее...</a>
+                            <span class="right_date" th:text="${news.date}"></span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<form id="sendRatingForm" method="post" th:action="@{/news/rating/update}">
+<input type="hidden" name="idNews">
+<input type="hidden" name="action">
+</form>
+
+<div th:replace="~{footer::footer}"/>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabinet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{menu::menu}"></div>
+
+<br><br>
+<div class="container border_news" style="min-height: 1000px;">
+    <div class="row">
+        <div class="col-md-12">
+            <center><h2>Кабинет</h2></center>
+            <center> <h2 th:text="${auth_user.login}"><br></center>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <img th:src="@{/userImage/{idImage}(idImage=${user.image.id})}" class="img-fluid">
+            <br><br>
+        </div>
+        <div class="col-md-9">
+                <form th:method="post" th:action="@{/user/update}" th:object="${user}" enctype="multipart/form-data">
+                    <input type="hidden" th:field="*{id}" id="id">
+
+                    <input type="text" th:field="*{login}" id="login" class="form-control"
+                           placeholder="Введите логин"><br>
+                    <div style="color: red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login error</div>
+
+                    <input type="text" th:field="*{email}" id="email" class="form-control"
+                           placeholder="Введите email"><br>
+                    <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+
+                    <input type="password" th:field="*{password}" id="password" class="form-control"
+                           placeholder="Новый пароль"><br>
+
+                    <input type="file" name="file" class="form-control" placeholder="Изменить фото"><br>
+
+                    <input type="submit" class="btn btn-success" value="Изменить">
+                </form>
+        </div>
+    </div>
+</div>
+
+
+<div th:replace="~{footer::footer}"/>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+</body>
+</html>
